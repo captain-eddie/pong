@@ -19,8 +19,7 @@ class Paddle():
             self.y += 1
             print(self.y)
 
-        #return Paddle(self.surface, (self.x, self.y))
-
+    #   draws paddle to screen
     def draw_to_screen(self, surface):
         self.paddle = pygame.Rect(self.x, self.y, 16, 100)
         pygame.draw.rect(surface, (255, 255, 255), self.paddle)
