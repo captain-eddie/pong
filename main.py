@@ -13,7 +13,13 @@ from pong_utill import ball
 from sys import exit
 from random import uniform
 
-def player_movement(keys, player1, player2):
+def player_movement(keys, player1, player2, surface):
+    bounds = surface.get_rect()
+    if player1.y < bounds.top or player1.y > bounds.bottom:
+        pass
+    if player2.y > bounds.bottom or player2.y < bounds.top:
+        pass
+
     #   player1
     if keys[pygame.K_w]:
         player1.move(up = True)
@@ -24,6 +30,11 @@ def player_movement(keys, player1, player2):
         player2.move(up = True)
     if keys[pygame.K_DOWN]:
         player2.move(up = False)
+
+def ball_paddle_collision(ball, p1, p2, speed):
+    if ball.pos[1] - ball.radius < p1.right or ball.pos[1] + ball.radius > p2.left:
+        speed *= -1
+        ball.move(speed)
 
 def main():
     #   initialize game window
@@ -67,7 +78,7 @@ def main():
             game_ball.reset(ball_position_transform)
 
         #   paddle movement w,s for p1 up,down for p2
-        player_movement(keys_pressed, player1, player2)
+        player_movement(keys_pressed, player1, player2, screen)
 
         #   ball movement
         if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top or game_ball.pos[1] + game_ball.radius > game_ball.bounds.bottom:
@@ -75,6 +86,8 @@ def main():
             game_ball.move(ball_position_transform)
         else:
             game_ball.move(ball_position_transform)
+
+        #ball_paddle_collision(game_ball, player1, player2, ball_position_transform)
 
 
 if __name__ == "__main__":

@@ -28,9 +28,9 @@ class Ball():
             xSpeed = speed * sin(angle)
             ySpeed = speed * cos(angle)
 
-            #if self.pos[1] - self.radius < self.bounds.top or self.pos[1] + self.radius > self.bounds.bottom:
-            #    ySpeed *= -1 
-            #    xSpeed *= -1
+            #aif self.pos[1] - self.radius < self.bounds.top or self.pos[1] + self.radius > self.bounds.bottom:
+            #a    ySpeed *= -1 
+            #a    xSpeed *= -1
 
             self.pos[0] += xSpeed
             self.pos[1] -= ySpeed

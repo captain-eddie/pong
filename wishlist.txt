@@ -1,3 +1,4 @@
 
 1.  Make game divider a dotted line
 2.  Make computer AI
+4.  Stop paddles from going of screen
