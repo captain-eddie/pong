@@ -28,29 +28,13 @@ class Ball():
             xSpeed = speed * sin(angle)
             ySpeed = speed * cos(angle)
 
-            if self.pos[1] - self.radius < self.bounds.top or self.pos[1] + self.radius > self.bounds.bottom:
-                ySpeed *= -1 
-                xSpeed *= -1
+            #if self.pos[1] - self.radius < self.bounds.top or self.pos[1] + self.radius > self.bounds.bottom:
+            #    ySpeed *= -1 
+            #    xSpeed *= -1
 
             self.pos[0] += xSpeed
             self.pos[1] -= ySpeed
             self.hitbox.center = self.pos
-
-            #if self.hitbox[0] < self.bounds.left or self.hitbox[0] > self.bounds.left:
-            #    #self.hitbox.vel_x *= -1 
-            #    xSpeed *= - 1
-            #if self.hitbox[1] < self.bounds.top or self.hitbox[1] > self.bounds.top:
-            #    #self.hitbox.vel_y *= -1
-            #    ySpeed *= -1
-
-            #if self.pos[0] - self.radius < self.bounds.left or self.pos[0] + self.radius > self.bounds.right:
-            #    xSpeed *= -1 
-
-            #if self.pos[1] + self.radius >= 600:
-            #    ySpeed *= -1
-            #elif self.pos[1] + self.radius <= 0:
-            #    ySpeed *= -1
-
 
     def reset(self, speed):
         self.pos = [500, 300]

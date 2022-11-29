@@ -70,7 +70,11 @@ def main():
         player_movement(keys_pressed, player1, player2)
 
         #   ball movement
-        game_ball.move(ball_position_transform)
+        if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top or game_ball.pos[1] + game_ball.radius > game_ball.bounds.bottom:
+            ball_position_transform *= -1
+            game_ball.move(ball_position_transform)
+        else:
+            game_ball.move(ball_position_transform)
 
 
 if __name__ == "__main__":
