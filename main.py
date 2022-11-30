@@ -41,15 +41,33 @@ def player_movement(keys, player1, player2, surface):
     if keys[pygame.K_DOWN]:
         player2.move(up = False)
 
-def ball_paddle_collision(ball, p1, p2, speed):
-    #   paddle 1
-    if ball.pos[1] >= p1.y and ball.pos[1] <= p1.y + p1.height:
-        if ball.pos[0] - ball.radius <= p1.x + p1.width:
-            ball.move(speed, p1, p2, hit_paddle1 = True)
-    #   paddle 2
-    if ball.pos[1] >= p2.y and ball.pos[1] <= p2.y + p2.height:
-        if ball.pos[0] + ball.radius >= p2.x + p2.width:
-            ball.move(speed, p1, p2, hit_paddle2 = True)
+def handle_collision(ball, left_paddle, right_paddle):
+    if ball.y + ball.radius >= 600:
+        ball.ySpeed *= -1
+    elif ball.y - ball.radius <= 0:
+        ball.ySpeed *= -1
+
+    if ball.xSpeed < 0:
+        if ball.y >= left_paddle.y and ball.y <= left_paddle.y + left_paddle.height:
+            if ball.x - ball.radius <= left_paddle.x + left_paddle.width:
+                ball.xSpeed *= -1
+                ball.color = (0, 255, 0)
+                middle_y = left_paddle.y + left_paddle.height / 2
+                difference_in_y = middle_y - ball.y
+                reduction_factor = (left_paddle.height / 2) / ball.speed
+                ySpeed = difference_in_y / reduction_factor
+                ball.ySpeed = -1 * ySpeed
+
+    else:
+        if ball.y >= right_paddle.y and ball.y <= right_paddle.y + right_paddle.height:
+            if ball.x + ball.radius >= right_paddle.x:
+                ball.xSpeed *= -1
+                ball.color = (0, 0, 255)
+                middle_y = right_paddle.y + right_paddle.height / 2
+                difference_in_y = middle_y - ball.y
+                reduction_factor = (right_paddle.height / 2) / ball.speed
+                ySpeed = difference_in_y / reduction_factor
+                ball.ySpeed = -1 * ySpeed
 
 
 def main():
@@ -102,21 +120,9 @@ def main():
         #   paddle movement w,s for p1 up,down for p2
         player_movement(keys_pressed, player1, player2, screen)
 
-        
-        #   ball movement
-        if game_ball.pos[1] + game_ball.radius > game_ball.bounds.bottom:
-            ball_position_transform *= -1
-            game_ball.hit_bound *= -1
-            game_ball.move(ball_position_transform, player1, player2)
-        if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top:
-            #ball_position_transform *= -1
-            game_ball.hit_bound *= -1
-            game_ball.xSpeed = ball_position_transform * sin(360)
-            game_ball.ySpeed = ball_position_transform * cos(360)
-            game_ball.aux_move(ball_position_transform, player1, player2)
-        else:
-            game_ball.move(ball_position_transform, player1, player2)
-            ball_paddle_collision(game_ball, player1, player2, ball_position_transform)
+        game_ball.move()
+        #   handles collision
+        handle_collision
 
 
 
