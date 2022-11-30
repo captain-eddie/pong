@@ -7,15 +7,16 @@ from math import sin
 from math import cos
 
 class Ball():
-    def __init__(self, surface, pos = [500, 300]):
+    def __init__(self, surface, speed, pos = [500, 300], angle = 360):
         self.color = (255, 255, 255)
         self.surface = surface
         self.pos = pos
         self.hitbox_pos = [485, 285]
         self.radius = 15
         self.hitbox = pygame.Rect(self.hitbox_pos[0], self.hitbox_pos[1], 2 * self.radius, 2 * self.radius)
-        self.xSpeed = 0
-        self.ySpeed = 0
+        self.angle = angle * speed        
+        self.xSpeed = speed * sin(angle)
+        self.ySpeed = speed * cos(angle)
         
         self.bounds = self.surface.get_rect()
         
@@ -28,9 +29,6 @@ class Ball():
     
     def move(self, speed, p1, p2, angle = 360, hit_paddle1 = False, hit_paddle2 = False):
         if not hit_paddle1 and not hit_paddle2:
-            angle = angle * speed        
-            self.xSpeed = speed * sin(angle)
-            self.ySpeed = speed * cos(angle)
             self.pos[0] += self.xSpeed
             self.pos[1] -= self.ySpeed
             self.hitbox.center = self.pos

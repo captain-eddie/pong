@@ -56,8 +56,8 @@ def main():
     player2 = paddle.Paddle(screen, (974, 250))
 
     # ball stuff
-    game_ball = ball.Ball(screen)
     ball_position_transform = uniform(MIN_TRANSFORM_SPEED, MAX_TRANSFORM_SPEED)
+    game_ball = ball.Ball(screen, ball_position_transform)
 
     #   main game loop
     while True:
@@ -82,7 +82,7 @@ def main():
         keys_pressed = pygame.key.get_pressed()
 
         #   reset ball
-        if keys_pressed[pygame.K_r] or (game_ball.pos[0] < game_bounds.left or game_ball.pos[0] > game_bounds.right):
+        if keys_pressed[pygame.K_r] or (game_ball.pos[0] < game_bounds.left or game_ball.pos[0] > game_bounds.right) or (game_ball.pos[1] < game_bounds.top or game_ball.pos[1] > game_bounds.bottom):
             ball_position_transform = uniform(MIN_TRANSFORM_SPEED, MAX_TRANSFORM_SPEED)
             game_ball.reset(ball_position_transform, player1, player2)
 
