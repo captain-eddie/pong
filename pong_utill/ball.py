@@ -29,6 +29,11 @@ class Ball():
         self.pos[1] -= self.ySpeed
     
     def move(self, speed, p1, p2, angle = 360, hit_paddle1 = False, hit_paddle2 = False):
+        # if HIT TOP FORREAL
+        if self.ySpeed < 0 and self.xSpeed < 0 and hit_paddle2:
+            print("Hit the top")
+            return
+
         #   hit top and bottom of screen
         if self.hit_bound == 1:
             self.angle = angle * speed        

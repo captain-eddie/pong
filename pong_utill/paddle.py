@@ -17,11 +17,11 @@ class Paddle():
     #   paddle movement
     def move(self, up = True):
         if up:
-            self.y -= 1
-            print(self.y)
+            self.y -= 0.25
+            #print(self.y)
         elif not up:
-            self.y += 1
-            print(self.y)
+            self.y += 0.25
+            #print(self.y)
 
     #   draws paddle to screen
     def draw_to_screen(self, surface):
