@@ -42,9 +42,11 @@ def player_movement(keys, player1, player2, surface):
         player2.move(up = False)
 
 def ball_paddle_collision(ball, p1, p2, speed):
+    #   paddle 1
     if ball.pos[1] >= p1.y and ball.pos[1] <= p1.y + p1.height:
         if ball.pos[0] - ball.radius <= p1.x + p1.width:
             ball.move(speed, p1, p2, hit_paddle1 = True)
+    #   paddle 2
     if ball.pos[1] >= p2.y and ball.pos[1] <= p2.y + p2.height:
         if ball.pos[0] + ball.radius >= p2.x + p2.width:
             ball.move(speed, p1, p2, hit_paddle2 = True)
@@ -102,14 +104,16 @@ def main():
 
         
         #   ball movement
-        if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top or game_ball.pos[1] + game_ball.radius > game_ball.bounds.bottom:
+        if game_ball.pos[1] + game_ball.radius > game_ball.bounds.bottom:
             ball_position_transform *= -1
             game_ball.hit_bound *= -1
             game_ball.move(ball_position_transform, player1, player2)
-            if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top:
-                game_ball.xSpeed = ball_position_transform * sin(360) * -1
-                game_ball.ySpeed = ball_position_transform * cos(360) * -1
-                game_ball.aux_move(ball_position_transform, player1, player2)
+        if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top:
+            #ball_position_transform *= -1
+            game_ball.hit_bound *= -1
+            game_ball.xSpeed = ball_position_transform * sin(360)
+            game_ball.ySpeed = ball_position_transform * cos(360)
+            game_ball.aux_move(ball_position_transform, player1, player2)
         else:
             game_ball.move(ball_position_transform, player1, player2)
             ball_paddle_collision(game_ball, player1, player2, ball_position_transform)
