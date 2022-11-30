@@ -104,12 +104,16 @@ def main():
         #   ball movement
         if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top or game_ball.pos[1] + game_ball.radius > game_ball.bounds.bottom:
             ball_position_transform *= -1
-            game_ball.move(ball_position_transform, player1, player2, hit_bound = True)
-        else:
-            ball_position_transform *= -1
+            game_ball.hit_bound *= -1
             game_ball.move(ball_position_transform, player1, player2)
+            if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top:
+                game_ball.xSpeed = ball_position_transform * sin(360) * -1
+                game_ball.ySpeed = ball_position_transform * cos(360) * -1
+                game_ball.aux_move(ball_position_transform, player1, player2)
+        else:
+            game_ball.move(ball_position_transform, player1, player2)
+            ball_paddle_collision(game_ball, player1, player2, ball_position_transform)
 
-        ball_paddle_collision(game_ball, player1, player2, ball_position_transform)
 
 
 if __name__ == "__main__":
