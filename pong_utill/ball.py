@@ -19,21 +19,24 @@ class Ball():
         self.ySpeed = speed * cos(angle)
         
         self.bounds = self.surface.get_rect()
-        
-        #self.border_rect = pygame.display.get_surface().get_rect()
-        #self.hitbox.clamp_ip(self.border_rect)
 
     def draw_to_screen(self):
         pygame.draw.circle(self.surface, self.color, self.pos, self.radius)
-        #pygame.draw.rect(self.surface, (255, 0, 0), self.hitbox, 2)
     
-    def move(self, speed, p1, p2, angle = 360, hit_paddle1 = False, hit_paddle2 = False):
-        if not hit_paddle1 and not hit_paddle2:
+    def move(self, speed, p1, p2, angle = 360, hit_paddle1 = False, hit_paddle2 = False, hit_bound = False):
+        if not hit_paddle1 and not hit_paddle2 and not hit_bound:
             self.pos[0] += self.xSpeed
             self.pos[1] -= self.ySpeed
             self.hitbox.center = self.pos
+        #   hit top and bottom of screen
+        if hit_bound:
+            self.angle = angle * speed        
+            self.xSpeed = speed * sin(angle)
+            self.ySpeed = speed * cos(angle)
+            self.pos[0] += self.xSpeed
+            self.pos[1] -= self.ySpeed
         #   player1
-        if hit_paddle1:
+        if hit_paddle1 and not hit_bound:
             self.xSpeed *= -1
             middle_y = p1.y + p1.height / 2
             difference_in_y = middle_y - self.pos[1]
@@ -45,7 +48,7 @@ class Ball():
             self.color = (0, 255, 0)
 
         #   player2
-        elif hit_paddle2:
+        elif hit_paddle2 and not hit_bound:
             self.xSpeed *= -1
             middle_y = p2.y + p2.height / 2
             difference_in_y = middle_y - self.pos[1]

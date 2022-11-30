@@ -12,16 +12,23 @@ from pong_utill import paddle
 from pong_utill import ball
 from sys import exit
 from random import uniform
-from math import sqrt
+from math import sin, cos
 
 MIN_TRANSFORM_SPEED, MAX_TRANSFORM_SPEED = 0.2, 0.4
 
 def player_movement(keys, player1, player2, surface):
     bounds = surface.get_rect()
-    if player1.y < bounds.top or player1.y > bounds.bottom:
-        pass
-    if player2.y > bounds.bottom or player2.y < bounds.top:
-        pass
+    #   clamp p1 paddle on screen
+    if player1.y < bounds.top:
+        player1.y = bounds.top + 1
+    if player1.y > bounds.bottom:
+        player1.y = bounds.bottom - 1
+
+    #   clamp p2 paddle on screen
+    if player2.y < bounds.top:
+        player2.y = bounds.top + 1
+    if player2.y > bounds.bottom:
+        player2. y = bounds.bottom - 1
 
     #   player1
     if keys[pygame.K_w]:
@@ -38,10 +45,9 @@ def ball_paddle_collision(ball, p1, p2, speed):
     if ball.pos[1] >= p1.y and ball.pos[1] <= p1.y + p1.height:
         if ball.pos[0] - ball.radius <= p1.x + p1.width:
             ball.move(speed, p1, p2, hit_paddle1 = True)
-    else:
-        if ball.pos[1] >= p2.y and ball.pos[1] <= p2.y + p2.height:
-            if ball.pos[0] + ball.radius >= p2.x:
-                ball.move(speed, p1, p2, hit_paddle2 = True)
+    if ball.pos[1] >= p2.y and ball.pos[1] <= p2.y + p2.height:
+        if ball.pos[0] + ball.radius >= p2.x + p2.width:
+            ball.move(speed, p1, p2, hit_paddle2 = True)
 
 
 def main():
@@ -82,7 +88,7 @@ def main():
         keys_pressed = pygame.key.get_pressed()
 
         #   reset ball
-        if keys_pressed[pygame.K_r] or (game_ball.pos[0] < game_bounds.left or game_ball.pos[0] > game_bounds.right) or (game_ball.pos[1] < game_bounds.top or game_ball.pos[1] > game_bounds.bottom):
+        if keys_pressed[pygame.K_r] or (game_ball.pos[0] < game_bounds.left or game_ball.pos[0] > game_bounds.right):
             ball_position_transform = uniform(MIN_TRANSFORM_SPEED, MAX_TRANSFORM_SPEED)
             game_ball.reset(ball_position_transform, player1, player2)
 
@@ -94,11 +100,13 @@ def main():
         #   paddle movement w,s for p1 up,down for p2
         player_movement(keys_pressed, player1, player2, screen)
 
+        
         #   ball movement
         if game_ball.pos[1] - game_ball.radius < game_ball.bounds.top or game_ball.pos[1] + game_ball.radius > game_ball.bounds.bottom:
             ball_position_transform *= -1
-            game_ball.move(ball_position_transform, player1, player2)
+            game_ball.move(ball_position_transform, player1, player2, hit_bound = True)
         else:
+            ball_position_transform *= -1
             game_ball.move(ball_position_transform, player1, player2)
 
         ball_paddle_collision(game_ball, player1, player2, ball_position_transform)
